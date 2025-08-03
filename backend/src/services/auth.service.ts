@@ -3,7 +3,9 @@ import SessionModel from "../models/session.model.js";
 import UserModel from "../models/user.model.js";
 import VerificationCodeModel from "../models/verificationCode.model.js";
 import {
+  fiveMinutesAgo,
   ONE_DAY_MS,
+  oneHourFromNow,
   oneYearFromNow,
   thirtyDaysFromNow,
 } from "../utils/date.js";
@@ -12,6 +14,7 @@ import {
   CONFLICT,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
+  TOO_MANY_REQUESTS,
   UNAUTHORIZED,
 } from "../constants/http.js";
 import {
@@ -21,7 +24,10 @@ import {
   verifyToken,
 } from "../utils/jwt.js";
 import sendMail from "../utils/sendMail.js";
-import { getVerifyEmailTemplate } from "../utils/emailTemplates.js";
+import {
+  getPasswordResetTemplate,
+  getVerifyEmailTemplate,
+} from "../utils/emailTemplates.js";
 import { APP_ORIGIN } from "../constants/env.js";
 
 export type CreateAccountParams = {
@@ -196,4 +202,48 @@ export const verifyEmail = async (code: string) => {
 
   // return user
   return { user: updatedUser.omitPassword() };
+};
+
+export const sendPasswordResetEmail = async (email: string) => {
+  // get the user by email
+  const user = await UserModel.findOne({ email });
+  appAssert(user, NOT_FOUND, "User not found");
+
+  // check email rate limit
+  const fiveMinAgo = fiveMinutesAgo();
+  const count = await VerificationCodeModel.countDocuments({
+    userId: user._id,
+    type: VerificationCodeTypes.PasswordReset,
+    createdAt: { $gt: fiveMinAgo },
+  });
+  appAssert(
+    count <= 1,
+    TOO_MANY_REQUESTS,
+    "Too many requests, please try again later"
+  );
+  // create verifiction code
+  const expiresAt = oneHourFromNow();
+  const verificationCode = await VerificationCodeModel.create({
+    userId: user._id,
+    type: VerificationCodeTypes.PasswordReset,
+    expiresAt,
+  });
+
+  // send verification email
+  const url = `${APP_ORIGIN}/password/reset?code=${verificationCode._id}&exp=${expiresAt.getTime()}`;
+  const { data, error } = await sendMail({
+    to: user.email,
+    ...getPasswordResetTemplate(url),
+  });
+  appAssert(data, INTERNAL_SERVER_ERROR, `${error?.name} - ${error?.message}`);
+
+  if (error) {
+    console.log(error);
+  }
+
+  // return success
+  return {
+    url,
+    emailId: data.id,
+  };
 };
