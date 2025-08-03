@@ -20,7 +20,4 @@ authRoutes.get("/email/verify/:code", verifyEmailHandler);
 authRoutes.post("/password/forgot", sendPasswordResetHandler);
 authRoutes.post("/password/reset", resetPasswordHandler);
 
-// prefix: /user
-// authRoutes.get("/user", userHandler)
-
 export default authRoutes;

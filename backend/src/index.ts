@@ -8,6 +8,8 @@ import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env.js";
 import catchErrors from "./utils/catchErrors.js";
 import { OK } from "./constants/http.js";
 import authRoutes from "./routes/auth.route.js";
+import authenticate from "./middleware/authenticate.js";
+import userRoutes from "./routes/user.route.js";
 
 const app = express();
 
@@ -27,7 +29,11 @@ app.get("/", async (req, res) => {
   });
 });
 
+// auth routes
 app.use("/auth", authRoutes);
+
+// protected routes
+app.use("/user", authenticate, userRoutes);
 
 app.use(errorHandler);
 
