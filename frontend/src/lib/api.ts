@@ -1,0 +1,30 @@
+import API from "@/config/apiClient";
+
+type LoginParams = {
+  email: string;
+  password: string;
+};
+
+type RegisterParams = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type User = {
+  email: string;
+  verified: boolean;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export const login = async (
+  data: LoginParams
+): Promise<{
+  message: string;
+}> => API.post("/auth/login", data);
+
+export const register = async (data: RegisterParams): Promise<User> =>
+  API.post("/auth/register", data);
