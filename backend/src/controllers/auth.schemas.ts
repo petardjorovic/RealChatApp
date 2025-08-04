@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import z from "zod";
 
 export const emailSchema = z.email().min(1).max(255);
@@ -24,3 +25,9 @@ export const resetPasswordSchema = z.object({
   password: passwordSchema,
   verificationCode: verificationCodeSchema,
 });
+
+export const sessionIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid session id",
+  });
