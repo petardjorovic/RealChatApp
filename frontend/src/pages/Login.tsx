@@ -41,10 +41,13 @@ function Login() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 shadow-lg p-8 rounded-lg"
+            className="space-y-5 shadow-lg p-8 rounded-lg bg-secondary"
           >
             {isError && (
-              <Alert variant="destructive" className="border-none py-0">
+              <Alert
+                variant="destructive"
+                className="border-none py-0 bg-secondary"
+              >
                 <AlertCircleIcon />
                 <AlertTitle>Invalid email or password</AlertTitle>
               </Alert>
@@ -56,7 +59,7 @@ function Login() {
                 <FormItem>
                   <FormLabel>Email address</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} autoFocus />
+                    <Input placeholder="Email" {...field} autoFocus required />
                   </FormControl>
                   {/* <FormDescription>This is your public email.</FormDescription> */}
                   <FormMessage />
@@ -85,12 +88,13 @@ function Login() {
             <div className="w-full text-center sm:text-right">
               <Link
                 to={"/password/forgot"}
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-chart-1 hover:underline"
               >
                 Forgot password?
               </Link>
             </div>
             <Button
+              variant={"custom"}
               type="submit"
               className="w-full cursor-pointer"
               disabled={isPending}
@@ -105,7 +109,7 @@ function Login() {
             </Button>
             <div className="w-full text-center text-sm">
               <span className="">Don't have an account?</span>{" "}
-              <Link to={"/register"} className="text-blue-600 hover:underline">
+              <Link to={"/register"} className="text-chart-1 hover:underline">
                 Sign up
               </Link>
             </div>

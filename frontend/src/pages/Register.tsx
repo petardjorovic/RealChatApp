@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,7 +42,7 @@ function Register() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 shadow-lg p-8 rounded-lg"
+            className="space-y-5 shadow-lg p-8 rounded-lg bg-secondary"
           >
             {isError && (
               <Alert variant="destructive" className="border-none py-0">
@@ -56,9 +57,9 @@ function Register() {
                 <FormItem>
                   <FormLabel>Email address</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} autoFocus />
+                    <Input placeholder="Email" {...field} autoFocus required />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-left" />
                 </FormItem>
               )}
             />
@@ -76,7 +77,10 @@ function Register() {
                       type="password"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormDescription className="text-left text-xs py-0 my-0">
+                    * Must be at least 6 characters long.
+                  </FormDescription>
+                  <FormMessage className="text-left" />
                 </FormItem>
               )}
             />
@@ -94,12 +98,13 @@ function Register() {
                       type="password"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-left" />
                 </FormItem>
               )}
             />
 
             <Button
+              variant={"custom"}
               type="submit"
               className="w-full cursor-pointer"
               disabled={isPending}
@@ -114,7 +119,7 @@ function Register() {
             </Button>
             <div className="w-full text-center text-sm">
               <span className="">Already have an account?</span>{" "}
-              <Link to={"/login"} className="text-blue-600 hover:underline">
+              <Link to={"/login"} className="text-chart-1 hover:underline">
                 Sign in
               </Link>
             </div>

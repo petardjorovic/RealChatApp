@@ -28,3 +28,6 @@ export const login = async (
 
 export const register = async (data: RegisterParams): Promise<User> =>
   API.post("/auth/register", data);
+
+export const verifyEmail = async (code: string): Promise<{ message: string }> =>
+  API.get(`/auth/email/verify/${code}`);
