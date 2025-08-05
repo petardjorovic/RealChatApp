@@ -35,3 +35,12 @@ export const verifyEmail = async (code: string): Promise<{ message: string }> =>
 export const sendPasswordResetEmail = async (data: {
   email: string;
 }): Promise<{ message: string }> => API.post("/auth/password/forgot", data);
+
+export const resetPassword = async (data: {
+  password: string;
+  code: string;
+}): Promise<{ message: string }> =>
+  API.post("/auth/password/reset", {
+    verificationCode: data.code,
+    password: data.password,
+  });

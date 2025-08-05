@@ -49,7 +49,7 @@ function ForgotPassword() {
             ) : (
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-5 "
+                className="space-y-5"
               >
                 {isError && (
                   <Alert
