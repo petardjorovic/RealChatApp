@@ -44,3 +44,5 @@ export const resetPassword = async (data: {
     verificationCode: data.code,
     password: data.password,
   });
+
+export const getUser = async () => API.get("/user");
