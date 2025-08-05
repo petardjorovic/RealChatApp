@@ -31,3 +31,7 @@ export const register = async (data: RegisterParams): Promise<User> =>
 
 export const verifyEmail = async (code: string): Promise<{ message: string }> =>
   API.get(`/auth/email/verify/${code}`);
+
+export const sendPasswordResetEmail = async (data: {
+  email: string;
+}): Promise<{ message: string }> => API.post("/auth/password/forgot", data);

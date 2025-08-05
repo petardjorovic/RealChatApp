@@ -1,7 +1,9 @@
 import z from "zod";
 
+export const emailSchema = z.email();
+
 export const loginFormSchema = z.object({
-  email: z.email(),
+  email: emailSchema,
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters." })
@@ -10,7 +12,7 @@ export const loginFormSchema = z.object({
 
 export const registerFormSchema = z
   .object({
-    email: z.email(),
+    email: emailSchema,
     password: z
       .string()
       .min(6, { message: "Password must be at least 6 characters." })
@@ -24,3 +26,7 @@ export const registerFormSchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+export const ForgotPasswordSchema = z.object({
+  email: emailSchema,
+});
