@@ -26,6 +26,8 @@ export const login = async (
   message: string;
 }> => API.post("/auth/login", data);
 
+export const logout = async () => API.get("/auth/logout");
+
 export const register = async (data: RegisterParams): Promise<User> =>
   API.post("/auth/register", data);
 
@@ -45,4 +47,16 @@ export const resetPassword = async (data: {
     password: data.password,
   });
 
-export const getUser = async () => API.get("/user");
+export const getUser = async (): Promise<User> => API.get("/user");
+
+export type Session = {
+  _id: string;
+  userAgent: string;
+  createdAt: string;
+  isCurrent?: boolean;
+};
+
+export const getSessions = async (): Promise<Session[]> => API.get("/sessions");
+
+export const deleteSession = async (id: string): Promise<{ message: string }> =>
+  API.delete(`/sessions/${id}`);
