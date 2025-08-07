@@ -6,14 +6,18 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "@/lib/api";
 import queryClient from "@/config/queryClient";
+import { useDarkMode } from "@/hooks/useDarkMode";
+import { Moon, Sun } from "lucide-react";
 
 function UserMenu() {
   const navigate = useNavigate();
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const { mutate: signOut } = useMutation({
     mutationFn: logout,
@@ -41,6 +45,23 @@ function UserMenu() {
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => navigate("/settings")}>
             Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={toggleDarkMode}>
+            {isDarkMode ? (
+              <>
+                Light mode
+                <DropdownMenuShortcut>
+                  <Sun />
+                </DropdownMenuShortcut>
+              </>
+            ) : (
+              <>
+                Dark mode
+                <DropdownMenuShortcut>
+                  <Moon />
+                </DropdownMenuShortcut>
+              </>
+            )}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
